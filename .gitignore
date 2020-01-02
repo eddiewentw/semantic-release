@@ -3,3 +3,6 @@
 
 # vim state files
 *.swp
+
+# Binary file folder
+bin
