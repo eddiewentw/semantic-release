@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/eddiewentw/semantic-release/pkg/git"
 	"github.com/eddiewentw/semantic-release/pkg/version"
 )
@@ -21,8 +19,6 @@ func main() {
 	}
 
 	nextVersion := version.Bump(currentTagVersion, commits)
-
-	fmt.Println(nextVersion)
 
 	err = git.TagHead(nextVersion)
 
