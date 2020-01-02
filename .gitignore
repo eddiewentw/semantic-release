@@ -1,0 +1,5 @@
+# Mac OS files
+.DS_Store
+
+# vim state files
+*.swp
