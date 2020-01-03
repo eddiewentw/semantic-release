@@ -15,6 +15,7 @@ const (
 )
 const featureType = "feat"
 const delimiter = "."
+const DEFAULT_VERSION = "v1" + delimiter + "0" + delimiter + "0"
 
 /*
 	split git tag name into three parts, which are MAJOR, MINOR and PATCH

@@ -11,6 +11,14 @@ import (
 func main() {
 	args := flag.Parse()
 
+	if args.IsFirstRelease == true {
+		if err := git.TagHead(version.DEFAULT_VERSION); err != nil {
+			panic(err)
+		}
+
+		return
+	}
+
 	currentTagVersion, err := git.GetLatestTagOnCurrentBranch()
 
 	if err != nil {
@@ -30,13 +38,11 @@ func main() {
 	if args.IsDryRun == true {
 		fmt.Println(" (" + flag.DRY_RUN_FLAG + ")")
 		return
-	} else {
-		fmt.Print("\n")
 	}
 
-	err = git.TagHead(nextVersion)
+	fmt.Print("\n")
 
-	if err != nil {
+	if err = git.TagHead(nextVersion); err != nil {
 		panic(err)
 	}
 }
