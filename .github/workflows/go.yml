@@ -17,6 +17,8 @@ jobs:
       uses: actions/checkout@v1
 
     - name: Download modules
+      env:
+        GOPROXY: "https://proxy.golang.org,direct"
       run: go mod download
 
     - name: Build
