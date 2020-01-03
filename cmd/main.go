@@ -1,8 +1,7 @@
 package main
 
 import (
-	"fmt"
-
+	"github.com/eddiewentw/semantic-release/internal/logger"
 	"github.com/eddiewentw/semantic-release/pkg/flag"
 	"github.com/eddiewentw/semantic-release/pkg/git"
 	"github.com/eddiewentw/semantic-release/pkg/version"
@@ -13,7 +12,7 @@ func main() {
 
 	if args.IsFirstRelease == true {
 		if err := git.TagHead(version.DEFAULT_VERSION); err != nil {
-			panic(err)
+			logger.Error(err)
 		}
 
 		return
@@ -22,27 +21,25 @@ func main() {
 	currentTagVersion, err := git.GetLatestTagOnCurrentBranch()
 
 	if err != nil {
-		panic(err)
+		logger.Warning("no first release")
+		return
 	}
 
 	commits, err := git.LogCommitsSince(currentTagVersion)
 
 	if err != nil {
-		panic(err)
+		logger.Error(err)
+		return
 	}
 
 	nextVersion := version.Bump(currentTagVersion, commits)
 
-	fmt.Print("Release:", nextVersion)
-
 	if args.IsDryRun == true {
-		fmt.Println(" (" + flag.DRY_RUN_FLAG + ")")
+		logger.Log("version: " + nextVersion + " (" + flag.DRY_RUN_FLAG + ")")
 		return
 	}
 
-	fmt.Print("\n")
-
 	if err = git.TagHead(nextVersion); err != nil {
-		panic(err)
+		logger.Error(err)
 	}
 }
