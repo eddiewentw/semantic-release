@@ -55,10 +55,13 @@ jobs:
         GOPROXY: "https://proxy.golang.org,direct"
       run: go mod download
 
+    - name: Build
+      run: make build
+
     - name: Bump version
       id: bump_version
       run: |
-        go run cmd/main.go
+        ./bin/semantic-release
         echo "##[set-output name=version;]$(git describe --abbrev=0)"
 
     - name: Publish version
@@ -73,3 +76,12 @@ jobs:
         release_name: Version ${{ steps.bump_version.outputs.version }}
         draft: false
         prerelease: false
+
+    - name: Upload cmd binary to release
+      uses: svenstaro/upload-release-action@v1-release
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ./bin/semantic-release
+        tag: ${{ steps.bump_version.outputs.version }}
+        overwrite: true
+        file_glob: true
