@@ -24,6 +24,12 @@ jobs:
     - name: Build
       run: make build
 
+    - name: Upload built binary
+      uses: actions/upload-artifact@v1
+      with:
+        name: artifact
+        path: ./bin/semantic-release
+
   release:
     name: Release
     needs: build
@@ -50,17 +56,16 @@ jobs:
     - name: Fetch all tags
       run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
 
-    - name: Download modules
-      env:
-        GOPROXY: "https://proxy.golang.org,direct"
-      run: go mod download
-
-    - name: Build
-      run: make build
+    - name: Download artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: artifact
+        path: ./bin
 
     - name: Bump version
       id: bump_version
       run: |
+        chmod +x ./bin/semantic-release
         ./bin/semantic-release
         echo "##[set-output name=version;]$(git describe --abbrev=0)"
 
