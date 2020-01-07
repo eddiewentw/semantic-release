@@ -26,16 +26,22 @@ func main() {
 		return
 	}
 
-	currentTagVersion, err := git.GetLatestTagOnCurrentBranch()
-
-	logger.DebugLog("current version is "+currentTagVersion, args.IsDebug)
+	/*
+		figure out current version
+	*/
+	currentVersion, err := file.ReadVersion()
 
 	if err != nil {
-		logger.Warning("no first release")
-		return
+		currentVersion, err = git.GetLatestTagOnCurrentBranch()
+
+		if err != nil {
+			logger.Warning("no first release")
+			return
+		}
 	}
 
-	commits, err := git.LogCommitsSince(currentTagVersion)
+	logger.DebugLog("current version is "+currentVersion, args.IsDebug)
+	commits, err := git.LogCommitsSince(currentVersion)
 
 	logger.DebugLog("\n"+string(commits), args.IsDebug)
 
@@ -44,7 +50,7 @@ func main() {
 		return
 	}
 
-	nextVersion := version.Bump(currentTagVersion, commits)
+	nextVersion := version.Bump(currentVersion, commits)
 
 	if args.IsDryRun == true {
 		logger.Log("version: " + nextVersion + " (" + flag.DRY_RUN_FLAG + ")")
