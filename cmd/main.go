@@ -19,7 +19,7 @@ func main() {
 			return
 		}
 
-		if err := git.TagHead(version.DEFAULT_VERSION); err != nil {
+		if err := git.CommitRelease(version.DEFAULT_VERSION); err != nil {
 			logger.Error(err)
 		}
 
@@ -56,7 +56,7 @@ func main() {
 		return
 	}
 
-	if err = git.TagHead(nextVersion); err != nil {
+	if err = git.CommitRelease(nextVersion); err != nil {
 		logger.Error(err)
 	}
 }

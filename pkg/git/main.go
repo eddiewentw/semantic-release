@@ -1,9 +1,11 @@
 package git
 
 import (
-	"github.com/eddiewentw/semantic-release/internal/logger"
 	"os/exec"
 	"strings"
+
+	"github.com/eddiewentw/semantic-release/internal/logger"
+	"github.com/eddiewentw/semantic-release/pkg/file"
 )
 
 /*
@@ -25,7 +27,21 @@ func LogCommitsSince(tag string) ([]byte, error) {
 		Output()
 }
 
-func TagHead(version string) error {
+func CommitRelease(version string) error {
+	err := exec.Command("git", "add", file.Filepath).
+		Run()
+
+	if err != nil {
+		return err
+	}
+
+	err = exec.Command("git", "commit", "-m", "chore(release): "+version).
+		Run()
+
+	if err != nil {
+		return err
+	}
+
 	logger.Log("version: " + version)
 
 	return exec.Command("git", "tag", "-a", version, "-m", "chore(release): "+version).

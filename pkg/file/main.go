@@ -3,11 +3,11 @@ package file
 import "io/ioutil"
 
 const filename = ".semantic-version"
-const filepath = "./" + filename
+const Filepath = "./" + filename
 
 func WriteVersion(version string) error {
 	return ioutil.WriteFile(
-		filepath,
+		Filepath,
 		[]byte(version+"\n"),
 		0644,
 	)
