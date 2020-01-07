@@ -11,6 +11,8 @@ func main() {
 	args := flag.Parse()
 
 	if args.IsFirstRelease == true {
+		logger.DebugLog("first release", args.IsDebug)
+
 		if err := git.TagHead(version.DEFAULT_VERSION); err != nil {
 			logger.Error(err)
 		}
@@ -20,12 +22,16 @@ func main() {
 
 	currentTagVersion, err := git.GetLatestTagOnCurrentBranch()
 
+	logger.DebugLog("current version is "+currentTagVersion, args.IsDebug)
+
 	if err != nil {
 		logger.Warning("no first release")
 		return
 	}
 
 	commits, err := git.LogCommitsSince(currentTagVersion)
+
+	logger.DebugLog("\n"+string(commits), args.IsDebug)
 
 	if err != nil {
 		logger.Error(err)
