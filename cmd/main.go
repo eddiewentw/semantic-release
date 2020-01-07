@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/eddiewentw/semantic-release/internal/logger"
+	"github.com/eddiewentw/semantic-release/pkg/file"
 	"github.com/eddiewentw/semantic-release/pkg/flag"
 	"github.com/eddiewentw/semantic-release/pkg/git"
 	"github.com/eddiewentw/semantic-release/pkg/version"
@@ -12,6 +13,11 @@ func main() {
 
 	if args.IsFirstRelease == true {
 		logger.DebugLog("first release", args.IsDebug)
+
+		if err := file.WriteVersion(version.DEFAULT_VERSION); err != nil {
+			logger.Error(err)
+			return
+		}
 
 		if err := git.TagHead(version.DEFAULT_VERSION); err != nil {
 			logger.Error(err)
@@ -42,6 +48,11 @@ func main() {
 
 	if args.IsDryRun == true {
 		logger.Log("version: " + nextVersion + " (" + flag.DRY_RUN_FLAG + ")")
+		return
+	}
+
+	if err = file.WriteVersion(nextVersion); err != nil {
+		logger.Error(err)
 		return
 	}
 
