@@ -12,6 +12,12 @@ func logWithLevel(message string, level string) {
 	fmt.Println(" " + message)
 }
 
+func DebugLog(message string, isDebug bool) {
+	if isDebug == true {
+		logWithLevel(message, colorDebug+"Debug"+colorReset+":")
+	}
+}
+
 func Log(message string) {
 	logWithLevel(message, "")
 }
