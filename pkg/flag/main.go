@@ -15,6 +15,10 @@ func Parse() *Args {
 		if args.IsFirstRelease == false && argument == FIRST_RELEASE_FLAG {
 			args.IsFirstRelease = true
 		}
+
+		if args.IsDebug == false && argument == DEBUG_FLAG {
+			args.IsDebug = true
+		}
 	}
 
 	return &args
