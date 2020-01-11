@@ -45,8 +45,6 @@ jobs:
 
     - name: Check out code
       uses: actions/checkout@v2
-      with:
-        fetch-depth: 30
 
     - name: Log in Git
       run: |
@@ -54,7 +52,7 @@ jobs:
         git config --local user.name "GitHub Action"
 
     - name: Fetch all tags
-      run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+      run: git fetch --prune --unshallow
 
     - name: Download artifact
       uses: actions/download-artifact@v1
