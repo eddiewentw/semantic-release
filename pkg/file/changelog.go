@@ -80,7 +80,7 @@ func generateVersionSection(nextVersion string, version string) string {
 	/*
 		If new version ends with ".0", it bumped minor just now.
 	*/
-	if strings.HasSuffix(version, ".0") {
+	if strings.HasSuffix(nextVersion, ".0") {
 		sectionMarkdown = "##"
 	}
 
