@@ -3,21 +3,20 @@ package file
 import (
 	"io/ioutil"
 	"strings"
-)
 
-const filename = ".semantic-version"
-const Filepath = "./" + filename
+	"github.com/eddiewentw/semantic-release/pkg/constant"
+)
 
 func WriteVersion(version string) error {
 	return ioutil.WriteFile(
-		Filepath,
+		constant.VersionFilepath,
 		[]byte(version+"\n"),
 		0644,
 	)
 }
 
 func ReadVersion() (string, error) {
-	byteValue, err := ioutil.ReadFile(Filepath)
+	byteValue, err := ioutil.ReadFile(constant.VersionFilepath)
 
 	if err != nil {
 		return "", err
