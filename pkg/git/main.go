@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/eddiewentw/semantic-release/internal/logger"
-	"github.com/eddiewentw/semantic-release/pkg/file"
+	"github.com/eddiewentw/semantic-release/pkg/constant"
 )
 
 /*
@@ -28,7 +28,7 @@ func LogCommitsSince(tag string) ([]byte, error) {
 }
 
 func CommitRelease(version string) error {
-	err := exec.Command("git", "add", file.VersionFilepath, file.ChangelogFilepath).
+	err := exec.Command("git", "add", constant.VersionFilepath, constant.ChangelogFilepath).
 		Run()
 
 	if err != nil {
