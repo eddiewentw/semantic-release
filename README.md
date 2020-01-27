@@ -1,6 +1,6 @@
 # Semantic Release
 
-[![github-action](https://github.com/eddiewentw/semantic-release/workflows/Go/badge.svg)](https://github.com/eddiewentw/semantic-release/actions) [![latest-tag](https://img.shields.io/github/v/tag/eddiewentw/semantic-release.svg)](https://github.com/eddiewentw/semantic-release/releases) [![conventional-commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+[![github-action](https://github.com/eddiewentw/semantic-release/workflows/Release/badge.svg)](https://github.com/eddiewentw/semantic-release/actions) [![latest-tag](https://img.shields.io/github/v/tag/eddiewentw/semantic-release.svg)](https://github.com/eddiewentw/semantic-release/releases) [![conventional-commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 
 Inspired by [standard-version](https://github.com/conventional-changelog/standard-version). Standard-version is awesome, when I develop a JS project, it is always my favorite. But sometimes when I develop a non-JS project, I don't want to integrate npm system to use that. That's why I start this repository. It's developed by Golang and it offers a binary file to execute.
 
