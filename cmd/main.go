@@ -57,6 +57,11 @@ func main() {
 		return
 	}
 
+	if err = file.WriteChangelog(nextVersion, commits); err != nil {
+		logger.Error(err)
+		return
+	}
+
 	if err = file.WriteVersion(nextVersion); err != nil {
 		logger.Error(err)
 		return
