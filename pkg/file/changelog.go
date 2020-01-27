@@ -16,18 +16,21 @@ const twoNewLines = "\n\n"
 
 func generateChangedSection(commits []byte, regex *regexp.Regexp) string {
 	text := ""
-	repoUrl := git.GetRepoUrl()
+	repoURL := git.GetRepoURL()
 
 	for _, matched := range regex.FindAllSubmatch(commits, -1) {
 		text = text + "- "
 
 		if len(matched[2]) > 0 {
-			text = text + "*" + string(matched[2]) + "*" + ": "
+			text = text + bold(string(matched[2])) + ": "
 			text = strings.Replace(text, "(", "", 1)
 			text = strings.Replace(text, ")", "", 1)
 		}
 
-		text = text + string(matched[3]) + " ([" + string(matched[1]) + "](" + repoUrl + "/commit/" + string(matched[1]) + "))" + "\n"
+		text = text + string(matched[3]) + " " + "(" + composeLink(
+			string(matched[1]),
+			repoURL+"/commit/"+string(matched[1]),
+		) + ")" + "\n"
 	}
 
 	if text == "" {
@@ -81,9 +84,12 @@ func generateVersionSection(nextVersion string, version string) string {
 		sectionMarkdown = "##"
 	}
 
-	repoUrl := git.GetRepoUrl()
+	repoURL := git.GetRepoURL()
 
-	return sectionMarkdown + " [" + nextVersion + "](" + repoUrl + "/compare/" + nextVersion + ".." + version + ")" + twoNewLines
+	return sectionMarkdown + " " + composeLink(
+		nextVersion,
+		repoURL+"/compare/"+nextVersion+".."+version,
+	) + twoNewLines
 }
 
 func readChangeLog() (string, error) {

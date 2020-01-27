@@ -51,7 +51,7 @@ func CommitRelease(version string) error {
 
 var protocolRegex = regexp.MustCompile(".*@")
 
-func GetRepoUrl() string {
+func GetRepoURL() string {
 	out, err := exec.Command("git", "remote", "get-url", "origin").
 		Output()
 
