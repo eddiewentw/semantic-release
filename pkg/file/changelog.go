@@ -23,8 +23,8 @@ func generateChangedSection(commits []byte, regex *regexp.Regexp) string {
 
 		if len(matched[2]) > 0 {
 			text = text + bold(string(matched[2])) + ": "
-			text = strings.Replace(text, "(", "", 1)
-			text = strings.Replace(text, ")", "", 1)
+			text = strings.TrimPrefix(text, "(")
+			text = strings.TrimSuffix(text, ")")
 		}
 
 		text = text + string(matched[3]) + " " + "(" + composeLink(
