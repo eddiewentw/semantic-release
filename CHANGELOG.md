@@ -8,7 +8,7 @@
 
 - remove redundant newline in https remote url ([05adf1a](https://github.com/eddiewentw/semantic-release/commit/05adf1a))
 
-## [v0.4.1](https://github.com/eddiewentw/semantic-release/compare/v0.4.1..v0.4.0)
+### [v0.4.1](https://github.com/eddiewentw/semantic-release/compare/v0.4.1..v0.4.0)
 
 #### Fixed bugs
 
