@@ -61,10 +61,16 @@ func GetRepoURL() string {
 		return ""
 	}
 
+	/*
+		HTTPS protocol
+	*/
 	if strings.HasPrefix(string(out), httpsProtocol) == true {
-		return string(out)
+		return strings.TrimSuffix(string(out), "\n")
 	}
 
+	/*
+		SSH protocol
+	*/
 	url := strings.Replace(string(out), ".git", "", 1)
 	url = strings.Replace(url, ":", "/", 1)
 	url = protocolRegex.ReplaceAllString(url, httpsProtocol)
