@@ -52,11 +52,6 @@ func main() {
 
 	nextVersion := version.Bump(currentVersion, commits)
 
-	if args.IsDryRun == true {
-		logger.Log("version: " + nextVersion + " (" + flag.DRY_RUN_FLAG + ")")
-		return
-	}
-
 	if err = file.WriteChangelog(nextVersion, commits); err != nil {
 		logger.Error(err)
 		return
@@ -64,6 +59,11 @@ func main() {
 
 	if err = file.WriteVersion(nextVersion); err != nil {
 		logger.Error(err)
+		return
+	}
+
+	if args.IsDryRun == true {
+		logger.Log("version: " + nextVersion + " (" + flag.DRY_RUN_FLAG + ")")
 		return
 	}
 
