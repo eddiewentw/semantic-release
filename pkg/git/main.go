@@ -2,6 +2,7 @@ package git
 
 import (
 	"os/exec"
+	"regexp"
 	"strings"
 
 	"github.com/eddiewentw/semantic-release/internal/logger"
@@ -46,4 +47,22 @@ func CommitRelease(version string) error {
 
 	return exec.Command("git", "tag", "-a", version, "-m", "chore(release): "+version).
 		Run()
+}
+
+var protocolRegex = regexp.MustCompile(".*@")
+
+func GetRepoUrl() string {
+	out, err := exec.Command("git", "remote", "get-url", "origin").
+		Output()
+
+	if err != nil {
+		return ""
+	}
+
+	url := strings.Replace(string(out), ".git", "", 1)
+	url = strings.Replace(url, ":", "/", 1)
+	url = protocolRegex.ReplaceAllString(url, "https://")
+	url = strings.TrimSuffix(url, "\n")
+
+	return url
 }

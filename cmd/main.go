@@ -52,7 +52,7 @@ func main() {
 
 	nextVersion := version.Bump(currentVersion, commits)
 
-	if err = file.WriteChangelog(nextVersion, commits); err != nil {
+	if err = file.WriteChangelog(commits, nextVersion, currentVersion); err != nil {
 		logger.Error(err)
 		return
 	}

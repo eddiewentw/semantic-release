@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/eddiewentw/semantic-release/pkg/constant"
+	"github.com/eddiewentw/semantic-release/pkg/git"
 )
 
 const fileHeader = `# Changelog
@@ -15,6 +16,7 @@ const twoNewLines = "\n\n"
 
 func generateChangedSection(commits []byte, regex *regexp.Regexp) string {
 	text := ""
+	repoUrl := git.GetRepoUrl()
 
 	for _, matched := range regex.FindAllSubmatch(commits, -1) {
 		text = text + "- "
@@ -25,7 +27,7 @@ func generateChangedSection(commits []byte, regex *regexp.Regexp) string {
 			text = strings.Replace(text, ")", "", 1)
 		}
 
-		text = text + string(matched[3]) + " (" + string(matched[1]) + ")" + "\n"
+		text = text + string(matched[3]) + " ([" + string(matched[1]) + "](" + repoUrl + "/commit/" + string(matched[1]) + "))" + "\n"
 	}
 
 	if text == "" {
@@ -69,7 +71,7 @@ func generateFixSection(commits []byte) string {
 /*
 	head of this change log section
 */
-func generateVersionSection(version string) string {
+func generateVersionSection(nextVersion string, version string) string {
 	sectionMarkdown := "###"
 
 	/*
@@ -79,7 +81,9 @@ func generateVersionSection(version string) string {
 		sectionMarkdown = "##"
 	}
 
-	return sectionMarkdown + " " + version + twoNewLines
+	repoUrl := git.GetRepoUrl()
+
+	return sectionMarkdown + " [" + nextVersion + "](" + repoUrl + "/compare/" + nextVersion + ".." + version + ")" + twoNewLines
 }
 
 func readChangeLog() (string, error) {
@@ -92,11 +96,11 @@ func readChangeLog() (string, error) {
 	return string(byteValue), nil
 }
 
-func WriteChangelog(version string, commits []byte) error {
+func WriteChangelog(commits []byte, nextVersion string, version string) error {
 	/*
 		body: new section
 	*/
-	content := generateVersionSection(version)
+	content := generateVersionSection(nextVersion, version)
 
 	content = content + generateFeatureSection(commits)
 	content = content + generateFixSection(commits)
