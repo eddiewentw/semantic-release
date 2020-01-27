@@ -21,13 +21,13 @@ func generateChangedSection(commits []byte, regex *regexp.Regexp) string {
 	for _, matched := range regex.FindAllSubmatch(commits, -1) {
 		text = text + "- "
 
-		if len(matched[1]) > 0 {
-			text = text + "*" + string(matched[1]) + "*" + ": "
+		if len(matched[2]) > 0 {
+			text = text + "*" + string(matched[2]) + "*" + ": "
 			text = strings.Replace(text, "(", "", 1)
 			text = strings.Replace(text, ")", "", 1)
 		}
 
-		text = text + string(matched[2]) + "\n"
+		text = text + string(matched[3]) + " (" + string(matched[1]) + ")" + "\n"
 	}
 
 	if text == "" {
@@ -37,9 +37,10 @@ func generateChangedSection(commits []byte, regex *regexp.Regexp) string {
 	return text + "\n"
 }
 
-var commonRegex = `(\(.+\))?: (.+)`
+const commitRegex = `(\w{7}) `
+const messageRegex = `(\(.+\))?: (.+)`
 
-var featMessageRegex = regexp.MustCompile("feat" + commonRegex)
+var featMessageRegex = regexp.MustCompile(commitRegex + "feat" + messageRegex)
 
 func generateFeatureSection(commits []byte) string {
 	content := generateChangedSection(commits, featMessageRegex)
@@ -53,7 +54,7 @@ func generateFeatureSection(commits []byte) string {
 		content
 }
 
-var fixMessageRegex = regexp.MustCompile("fix" + commonRegex)
+var fixMessageRegex = regexp.MustCompile(commitRegex + "fix" + messageRegex)
 
 func generateFixSection(commits []byte) string {
 	content := generateChangedSection(commits, fixMessageRegex)
