@@ -28,7 +28,7 @@ func LogCommitsSince(tag string) ([]byte, error) {
 }
 
 func CommitRelease(version string) error {
-	err := exec.Command("git", "add", file.Filepath).
+	err := exec.Command("git", "add", file.VersionFilepath).
 		Run()
 
 	if err != nil {
