@@ -51,6 +51,8 @@ func CommitRelease(version string) error {
 
 var protocolRegex = regexp.MustCompile(".*@")
 
+const httpsProtocol = "https://"
+
 func GetRepoURL() string {
 	out, err := exec.Command("git", "remote", "get-url", "origin").
 		Output()
@@ -59,9 +61,19 @@ func GetRepoURL() string {
 		return ""
 	}
 
+	/*
+		HTTPS protocol
+	*/
+	if strings.HasPrefix(string(out), httpsProtocol) == true {
+		return strings.TrimSuffix(string(out), "\n")
+	}
+
+	/*
+		SSH protocol
+	*/
 	url := strings.Replace(string(out), ".git", "", 1)
 	url = strings.Replace(url, ":", "/", 1)
-	url = protocolRegex.ReplaceAllString(url, "https://")
+	url = protocolRegex.ReplaceAllString(url, httpsProtocol)
 	url = strings.TrimSuffix(url, "\n")
 
 	return url
