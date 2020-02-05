@@ -9,7 +9,7 @@ Inspired by [standard-version](https://github.com/conventional-changelog/standar
 If you're using golang, you can ....
 
 ```bash
-$ go run github.com/eddiewentw/semantic-release/cmd
+$ go run github.com/eddiewentw/semantic-release
 ```
 
 If you're not using golang ....
