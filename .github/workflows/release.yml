@@ -1,75 +1,63 @@
-name: Go
-on: [push]
+name: Release
+on:
+  push:
+    branches:
+      - release
 jobs:
-
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-
     - name: Set up Go 1.13
       uses: actions/setup-go@v1
       with:
         go-version: 1.13
       id: go
-
     - name: Check out code
       uses: actions/checkout@v2
-
     - name: Download modules
       env:
         GOPROXY: "https://proxy.golang.org,direct"
       run: go mod download
-
     - name: Build
       run: make build
-
     - name: Upload built binary
       uses: actions/upload-artifact@v1
       with:
         name: artifact
         path: ./bin/semantic-release
-
   release:
     name: Release
     needs: build
     if: github.ref == 'refs/heads/release'
     runs-on: ubuntu-latest
     steps:
-
     - name: Set up Go 1.13
       uses: actions/setup-go@v1
       with:
         go-version: 1.13
       id: go
-
     - name: Check out code
       uses: actions/checkout@v2
-
     - name: Log in Git
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-
     - name: Fetch all tags
       run: git fetch --prune --unshallow
-
     - name: Download artifact
       uses: actions/download-artifact@v1
       with:
         name: artifact
         path: ./bin
-
     - name: Bump version
       id: bump_version
       run: |
         chmod +x ./bin/semantic-release
         ./bin/semantic-release
         echo "##[set-output name=version;]$(git describe --abbrev=0)"
-
     - name: Publish version
       run: git push --follow-tags origin release
-
     - name: Create release
       uses: actions/create-release@v1
       env:
@@ -79,7 +67,6 @@ jobs:
         release_name: Version ${{ steps.bump_version.outputs.version }}
         draft: false
         prerelease: false
-
     - name: Upload cmd binary to release
       uses: svenstaro/upload-release-action@v1-release
       with:
