@@ -1,6 +1,7 @@
 package git
 
 import (
+	"os"
 	"os/exec"
 	"regexp"
 	"strings"
@@ -29,11 +30,27 @@ func LogCommitsSince(tag string) ([]byte, error) {
 }
 
 func CommitRelease(version string) error {
-	err := exec.Command("git", "add", constant.VersionFilepath, constant.ChangelogFilepath).
+	err := exec.Command("git", "add", constant.VersionFilepath).
 		Run()
 
 	if err != nil {
 		return err
+	}
+
+	/*
+		check if changelog file exists
+
+		There is no changelog file when the first release.
+	*/
+	_, err = os.Stat(constant.ChangelogFilepath)
+
+	if os.IsNotExist(err) == false {
+		err := exec.Command("git", "add", constant.ChangelogFilepath).
+			Run()
+
+		if err != nil {
+			return err
+		}
 	}
 
 	err = exec.Command("git", "commit", "-m", "chore(release): "+version).
