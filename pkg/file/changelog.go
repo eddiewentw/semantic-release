@@ -90,7 +90,7 @@ func generateVersionSection(nextVersion string, version string) string {
 
 	return sectionMarkdown + " " + composeLink(
 		nextVersion,
-		repoURL+"/compare/"+nextVersion+".."+version,
+		repoURL+"/compare/"+version+"..."+nextVersion,
 	) + twoNewLines
 }
 
