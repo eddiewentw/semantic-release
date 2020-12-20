@@ -1,9 +1,11 @@
 package file
 
 import (
+	"fmt"
 	"io/ioutil"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/eddiewentw/semantic-release/pkg/constant"
 	"github.com/eddiewentw/semantic-release/pkg/git"
@@ -73,6 +75,10 @@ func generateFixSection(commits []byte) string {
 		content
 }
 
+func generateDateNote() string {
+	return fmt.Sprintf("_%s_", time.Now().Format("2006-01-02")) + twoNewLines
+}
+
 /*
 	head of this change log section
 */
@@ -110,6 +116,7 @@ func WriteChangelog(commits []byte, nextVersion string, version string) error {
 	*/
 	content := generateVersionSection(nextVersion, version)
 
+	content = content + generateDateNote()
 	content = content + generateFeatureSection(commits)
 	content = content + generateFixSection(commits)
 
