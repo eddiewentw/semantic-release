@@ -1,6 +1,7 @@
 package git
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"regexp"
@@ -62,8 +63,14 @@ func CommitRelease(version string) error {
 
 	logger.Log("version: " + version)
 
-	return exec.Command("git", "tag", "-a", version, "-m", "chore(release): "+version).
+	err = exec.Command("git", "tag", "-a", version, "-m", "chore(release): "+version).
 		Run()
+
+	if err != nil {
+		return fmt.Errorf("tag '%s' already exists", version)
+	}
+
+	return nil
 }
 
 var protocolRegex = regexp.MustCompile(".*@")
